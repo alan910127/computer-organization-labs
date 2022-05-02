@@ -11,4 +11,8 @@ module alu(
 
 /* Write your code HERE */
 
+always @(*) begin
+    
+end
+
 endmodule

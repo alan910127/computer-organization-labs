@@ -27,10 +27,10 @@ assign Zero = (result == 0) ? 1'b1 : 1'b0;
 
 always @(*) begin
     case (operation)
-    2'b00: result <= A & B;
-    2'b01: result <= A | B;
-    2'b10: result <= A + B + Binvert;
-    2'b11: result <= (A < (B + Binvert)) ? 32'b1 : 32'b0;
+    2'b00: result = A & B;
+    2'b01: result = A | B;
+    2'b10: result = A + B + Binvert;
+    2'b11: result = (A < (B + Binvert)) ? 32'b1 : 32'b0;
     endcase
 end
 

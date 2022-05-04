@@ -17,116 +17,106 @@ module Decoder(
 
 /* Write your code HERE */
 
-reg regWrite, branch, jump, writeBack0, writeBack1, memRead, memWrite, aluSrcA, aluSrcB, aluOp;
+reg RegWrite, Branch, Jump, WriteBack0, WriteBack1, MemRead, MemWrite, AluSrcA, AluSrcB, ALUOp;
 
-assign RegWrite     = regWrite;
-assign Branch       = branch;
-assign Jump         = jump;
-assign WriteBack0   = writeBack0;
-assign WriteBack1   = writeBack1;
-assign MemRead      = memRead;
-assign MemWrite     = memWrite;
-assign ALUSrcA      = aluSrcA;
-assign ALUSrcB      = aluSrcB;
-assign ALUOp        = aluOp;
 
 always @(instr_i) begin
     case (instr_i)
     7'b0110011: begin // R-type
-        regWrite    <= 1'b1;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0;
-        writeBack0  <= 1'b0;
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0; // branch = 0 => don't care
-        aluSrcB     <= 1'b0;
-        aluOp       <= 2'b10;
+        RegWrite    = 1'b1;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0;
+        WriteBack0  = 1'b0;
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0; // Branch = 0 => don't care
+        AluSrcB     = 1'b0;
+        ALUOp       = 2'b10;
     end
     7'b0010011: begin // addi
-        regWrite    <= 1'b1;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0;
-        writeBack0  <= 1'b0;
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0; // branch = 0 => don't care
-        aluSrcB     <= 1'b1;
-        aluOp       <= 2'b00;
+        RegWrite    = 1'b1;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0;
+        WriteBack0  = 1'b0;
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0; // Branch = 0 => don't care
+        AluSrcB     = 1'b1;
+        ALUOp       = 2'b00;
     end
     7'b0000011: begin // Load
-        regWrite    <= 1'b1;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0;
-        writeBack0  <= 1'b1;
-        memRead     <= 1'b1;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0; // branch = 0 => don't care
-        aluSrcB     <= 1'b1;
-        aluOp       <= 2'b00;
+        RegWrite    = 1'b1;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0;
+        WriteBack0  = 1'b1;
+        MemRead     = 1'b1;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0; // Branch = 0 => don't care
+        AluSrcB     = 1'b1;
+        ALUOp       = 2'b00;
     end
     7'b0100011: begin // Store
-        regWrite    <= 1'b0;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0; // regWrite = 0 => don't care
-        writeBack0  <= 1'b0; // regWrite = 0 => don't care
-        memRead     <= 1'b0;
-        memWrite    <= 1'b1;
-        aluSrcA     <= 1'b0; // branch = 0 => don't care
-        aluSrcB     <= 1'b1;
-        aluOp       <= 2'b00;
+        RegWrite    = 1'b0;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0; // RegWrite = 0 => don't care
+        WriteBack0  = 1'b0; // RegWrite = 0 => don't care
+        MemRead     = 1'b0;
+        MemWrite    = 1'b1;
+        AluSrcA     = 1'b0; // Branch = 0 => don't care
+        AluSrcB     = 1'b1;
+        ALUOp       = 2'b00;
     end
-    7'b1100011: begin // branch
-        regWrite    <= 1'b0;
-        branch      <= 1'b1;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0; // regWrite = 0 => don't care
-        writeBack0  <= 1'b0; // regWrite = 0 => don't care
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0; // 0 => PC + immediate
-        aluSrcB     <= 1'b0;
-        aluOp       <= 2'b01;
+    7'b1100011: begin // Branch
+        RegWrite    = 1'b0;
+        Branch      = 1'b1;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0; // RegWrite = 0 => don't care
+        WriteBack0  = 1'b0; // RegWrite = 0 => don't care
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0; // 0 => PC + immediate
+        AluSrcB     = 1'b0;
+        ALUOp       = 2'b01;
     end
     7'b1101111: begin // jal rd, imm
-        regWrite    <= 1'b1;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b1;
-        writeBack0  <= 1'b0; // writeBack1 = 1 => don't care
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0; // 0 => PC + immediate
-        aluSrcB     <= 1'b0; // writeBack1 = 1 => don't care
-        aluOp       <= 2'b00; // writeBack1 = 1 => don't care
+        RegWrite    = 1'b1;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b1;
+        WriteBack0  = 1'b0; // WriteBack1 = 1 => don't care
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0; // 0 => PC + immediate
+        AluSrcB     = 1'b0; // WriteBack1 = 1 => don't care
+        ALUOp       = 2'b00; // WriteBack1 = 1 => don't care
     end
     7'b1100111: begin // jalr rd, rs, imm
-        regWrite    <= 1'b1;
-        branch      <= 1'b0;
-        jump        <= 1'b1;
-        writeBack1  <= 1'b1;
-        writeBack0  <= 1'b0;  // writeBack1 = 1 => don't care
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b1;  // 1 => rs + immediate
-        aluSrcB     <= 1'b0;  // writeBack1 = 1 => don't care
-        aluOp       <= 2'b10; // writeBack1 = 1 => don't care
+        RegWrite    = 1'b1;
+        Branch      = 1'b0;
+        Jump        = 1'b1;
+        WriteBack1  = 1'b1;
+        WriteBack0  = 1'b0;  // WriteBack1 = 1 => don't care
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b1;  // 1 => rs + immediate
+        AluSrcB     = 1'b0;  // WriteBack1 = 1 => don't care
+        ALUOp       = 2'b10; // WriteBack1 = 1 => don't care
     end
     default: begin
-        regWrite    <= 1'b0;
-        branch      <= 1'b0;
-        jump        <= 1'b0;
-        writeBack1  <= 1'b0;
-        writeBack0  <= 1'b0;
-        memRead     <= 1'b0;
-        memWrite    <= 1'b0;
-        aluSrcA     <= 1'b0;
-        aluSrcB     <= 1'b0;
-        aluOp       <= 2'b00;
+        RegWrite    = 1'b0;
+        Branch      = 1'b0;
+        Jump        = 1'b0;
+        WriteBack1  = 1'b0;
+        WriteBack0  = 1'b0;
+        MemRead     = 1'b0;
+        MemWrite    = 1'b0;
+        AluSrcA     = 1'b0;
+        AluSrcB     = 1'b0;
+        ALUOp       = 2'b00;
     end
     endcase
 end

@@ -112,7 +112,7 @@ MUX_2to1 MUX_ALUSrcA(
 
 Adder Adder_PCReg(
     .src1_i(AddressSrc),
-    .src2_i(ImmGen_o),
+    .src2_i(Imm_Gen_o),
     .sum_o(JumpAddress)
 );
 

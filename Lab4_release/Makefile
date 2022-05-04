@@ -1,7 +1,7 @@
 all: cmp vvp
 
 cmp:
-	iverilog *.v -o Simple_CPU.vvp
+	iverilog -o Simple_CPU.vvp *.v
 vvp:
 	vvp Simple_CPU.vvp -fst -sdf-verbose -lxt2
 lxi:

@@ -149,8 +149,8 @@ Data_Memory Data_Memory(
 );
 
 MUX_2to1 MUX_WriteBack0(
-    .data0_i(MemoryResult),
-    .data1_i(ALUResult),
+    .data0_i(ALUResult),
+    .data1_i(MemoryResult),
     .select_i(WriteBack0),
     .data_o(MemALUResult)
 );

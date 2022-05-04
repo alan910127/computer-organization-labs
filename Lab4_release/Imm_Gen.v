@@ -17,7 +17,7 @@ assign func3  = instr_i[14:12];
 assign sign   = instr_i[31];
 
 /* Write your code HERE */
-always @(instr_i) begin
+always @(*) begin
     case (opcode)
     7'b0110011: begin // R-type
         Imm_Gen_o = 32'b0;

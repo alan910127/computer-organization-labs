@@ -104,7 +104,7 @@ always @(instr_i) begin
         MemWrite    = 1'b0;
         ALUSrcA     = 1'b1;  // 1 => rs + immediate
         ALUSrcB     = 1'b0;  // WriteBack1 = 1 => don't care
-        ALUOp       = 2'b10; // WriteBack1 = 1 => don't care
+        ALUOp       = 2'b00; // WriteBack1 = 1 => don't care
     end
     default: begin
         RegWrite    = 1'b0;

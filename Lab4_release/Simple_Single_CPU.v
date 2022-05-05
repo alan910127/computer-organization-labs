@@ -157,7 +157,7 @@ MUX_2to1 MUX_WriteBack0(
 
 MUX_2to1 MUX_WriteBack1(
     .data0_i(MemALUResult),
-    .data1_i(JumpAddress),
+    .data1_i(PC_plus4),
     .select_i(WriteBack1),
     .data_o(RegWriteData)
 );

@@ -85,7 +85,7 @@ always @(instr_i) begin
     7'b1101111: begin // jal rd, imm
         RegWrite    = 1'b1;
         Branch      = 1'b0;
-        Jump        = 1'b0;
+        Jump        = 1'b1;
         WriteBack1  = 1'b1;
         WriteBack0  = 1'b0; // WriteBack1 = 1 => don't care
         MemRead     = 1'b0;

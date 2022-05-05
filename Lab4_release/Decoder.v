@@ -17,7 +17,16 @@ module Decoder(
 
 /* Write your code HERE */
 
-reg RegWrite, Branch, Jump, WriteBack0, WriteBack1, MemRead, MemWrite, ALUSrcA, ALUSrcB, ALUOp;
+reg RegWrite;
+reg Branch;
+reg Jump;
+reg WriteBack0;
+reg WriteBack1;
+reg MemRead;
+reg MemWrite;
+reg ALUSrcA;
+reg ALUSrcB;
+reg [2-1:0] ALUOp;
 
 
 always @(instr_i) begin

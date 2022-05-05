@@ -8,6 +8,6 @@ module MUX_2to1(
     output [31:0] data_o
 );
 
-assign data_o = (select_i==0)?data0_i:data1_i;
+assign data_o = (select_i == 0) ? data0_i : data1_i;
 
 endmodule

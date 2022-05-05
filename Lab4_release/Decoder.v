@@ -17,7 +17,7 @@ module Decoder(
 
 /* Write your code HERE */
 
-reg RegWrite, Branch, Jump, WriteBack0, WriteBack1, MemRead, MemWrite, AluSrcA, AluSrcB, ALUOp;
+reg RegWrite, Branch, Jump, WriteBack0, WriteBack1, MemRead, MemWrite, ALUSrcA, ALUSrcB, ALUOp;
 
 
 always @(instr_i) begin
@@ -30,8 +30,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0;
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0; // Branch = 0 => don't care
-        AluSrcB     = 1'b0;
+        ALUSrcA     = 1'b0; // Branch = 0 => don't care
+        ALUSrcB     = 1'b0;
         ALUOp       = 2'b10;
     end
     7'b0010011: begin // addi
@@ -42,8 +42,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0;
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0; // Branch = 0 => don't care
-        AluSrcB     = 1'b1;
+        ALUSrcA     = 1'b0; // Branch = 0 => don't care
+        ALUSrcB     = 1'b1;
         ALUOp       = 2'b00;
     end
     7'b0000011: begin // Load
@@ -54,8 +54,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b1;
         MemRead     = 1'b1;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0; // Branch = 0 => don't care
-        AluSrcB     = 1'b1;
+        ALUSrcA     = 1'b0; // Branch = 0 => don't care
+        ALUSrcB     = 1'b1;
         ALUOp       = 2'b00;
     end
     7'b0100011: begin // Store
@@ -66,8 +66,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0; // RegWrite = 0 => don't care
         MemRead     = 1'b0;
         MemWrite    = 1'b1;
-        AluSrcA     = 1'b0; // Branch = 0 => don't care
-        AluSrcB     = 1'b1;
+        ALUSrcA     = 1'b0; // Branch = 0 => don't care
+        ALUSrcB     = 1'b1;
         ALUOp       = 2'b00;
     end
     7'b1100011: begin // Branch
@@ -78,8 +78,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0; // RegWrite = 0 => don't care
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0; // 0 => PC + immediate
-        AluSrcB     = 1'b0;
+        ALUSrcA     = 1'b0; // 0 => PC + immediate
+        ALUSrcB     = 1'b0;
         ALUOp       = 2'b01;
     end
     7'b1101111: begin // jal rd, imm
@@ -90,8 +90,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0; // WriteBack1 = 1 => don't care
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0; // 0 => PC + immediate
-        AluSrcB     = 1'b0; // WriteBack1 = 1 => don't care
+        ALUSrcA     = 1'b0; // 0 => PC + immediate
+        ALUSrcB     = 1'b0; // WriteBack1 = 1 => don't care
         ALUOp       = 2'b00; // WriteBack1 = 1 => don't care
     end
     7'b1100111: begin // jalr rd, rs, imm
@@ -102,8 +102,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0;  // WriteBack1 = 1 => don't care
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b1;  // 1 => rs + immediate
-        AluSrcB     = 1'b0;  // WriteBack1 = 1 => don't care
+        ALUSrcA     = 1'b1;  // 1 => rs + immediate
+        ALUSrcB     = 1'b0;  // WriteBack1 = 1 => don't care
         ALUOp       = 2'b10; // WriteBack1 = 1 => don't care
     end
     default: begin
@@ -114,8 +114,8 @@ always @(instr_i) begin
         WriteBack0  = 1'b0;
         MemRead     = 1'b0;
         MemWrite    = 1'b0;
-        AluSrcA     = 1'b0;
-        AluSrcB     = 1'b0;
+        ALUSrcA     = 1'b0;
+        ALUSrcB     = 1'b0;
         ALUOp       = 2'b00;
     end
     endcase

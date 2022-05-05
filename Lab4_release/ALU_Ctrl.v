@@ -12,24 +12,23 @@ assign func3 = instr[2:0];
 
 /* Write your code HERE */
 
-reg aluCtrl;
-assign ALU_Ctrl_o = aluCtrl;
+reg ALU_Ctrl_o;
 
 always @(*) begin
     case (ALUOp)
-    2'b00: aluCtrl = 4'b0010; //addi
-    2'b01: aluCtrl = 4'b0110; //branch
-    2'b10: begin //R-type
-        case (instr)
-        4'b0000: aluCtrl = 4'b0010; //add
-        4'b1000: aluCtrl = 4'b0110; //sub
-        4'b0111: aluCtrl = 4'b0000; //and
-        4'b0110: aluCtrl = 4'b0001; //or
-        4'b0010: aluCtrl = 4'b0111; //slt
-        default: aluCtrl = 4'b0000;
-        endcase
-    end
-    default: aluCtrl = 4'b0000;
+        2'b00: ALU_Ctrl_o = 4'b0010; //addi
+        2'b01: ALU_Ctrl_o = 4'b0110; //branch
+        2'b10: begin //R-type
+            case (instr)
+                4'b0000: ALU_Ctrl_o = 4'b0010; //add
+                4'b1000: ALU_Ctrl_o = 4'b0110; //sub
+                4'b0111: ALU_Ctrl_o = 4'b0000; //and
+                4'b0110: ALU_Ctrl_o = 4'b0001; //or
+                4'b0010: ALU_Ctrl_o = 4'b0111; //slt
+                default: ALU_Ctrl_o = 4'b0000;
+            endcase
+        end
+        default: ALU_Ctrl_o = 4'b0000;
     endcase
 end
 

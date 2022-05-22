@@ -15,4 +15,9 @@ module MEMWB_register (
     output reg [31:0] pc_add4_o
 );
 /* Write your code HERE */
+
+always @(posedge clk_i) begin
+    
+end
+
 endmodule

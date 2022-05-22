@@ -8,4 +8,8 @@ module Adder(
 
 /* Write your code HERE */
 
+always @(*) begin
+    sum_o = src1_i + src2_i;
+end
+
 endmodule

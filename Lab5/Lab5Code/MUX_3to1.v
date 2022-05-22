@@ -8,5 +8,14 @@ module MUX_3to1(
     output  reg [32-1:0] data_o
 );
 /* Write your code HERE */
-endmodule
 
+always @(*) begin
+    case (select_i) 
+    2'h0: data_o = data0_i;
+    2'h1: data_o = data1_i;
+    2'h2: data_o = data2_i;
+    default: data_o = 32'0;
+    endcase
+end
+
+endmodule

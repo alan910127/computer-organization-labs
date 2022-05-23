@@ -11,10 +11,9 @@ module MUX_3to1(
 
 always @(*) begin
     case (select_i) 
-    2'h0: data_o = data0_i;
-    2'h1: data_o = data1_i;
-    2'h2: data_o = data2_i;
-    default: data_o = 32'0;
+        2'b00: data_o = data0_i;
+        2'b01: data_o = data1_i;
+        2'b10, 2'b11: data_o = data2_i;
     endcase
 end
 

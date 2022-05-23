@@ -187,7 +187,7 @@ IDEXE_register IDtoEXE(
     .data1_i(RSdata_o),
     .data2_i(RTdata_o),
     .immgen_i(Imm_Gen_o),
-    .alu_ctrl_instr(ALU_Ctrl_o),
+    .alu_ctrl_instr({IFID_Instr_o[30], IFID_Instr_o[14:12]}),
     .WBreg_i(RDaddr_i),
     .pc_add4_i(IFID_PC_Add4_o),
 

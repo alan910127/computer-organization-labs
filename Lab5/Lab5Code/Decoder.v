@@ -35,7 +35,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0; // Branch = 0 => don't care
             ALUSrcB     = 1'b0;
-            ALUOp       = 2'b10;
+            ALUOp       = 2'h2;
         end
         7'b0010011: begin // I-type
             RegWrite    = 1'b1;
@@ -47,7 +47,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0; // Branch = 0 => don't care
             ALUSrcB     = 1'b1;
-            ALUOp       = 2'b00;
+            ALUOp       = 2'h0;
         end
         7'b0000011: begin // Load
             RegWrite    = 1'b1;
@@ -59,7 +59,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0; // Branch = 0 => don't care
             ALUSrcB     = 1'b1;
-            ALUOp       = 2'b00;
+            ALUOp       = 2'h0;
         end
         7'b0100011: begin // Store
             RegWrite    = 1'b0;
@@ -71,7 +71,7 @@ always @(opcode) begin
             MemWrite    = 1'b1;
             ALUSrcA     = 1'b0; // Branch = 0 => don't care
             ALUSrcB     = 1'b1;
-            ALUOp       = 2'b00;
+            ALUOp       = 2'h0;
         end
         7'b1100011: begin // Branch
             RegWrite    = 1'b0;
@@ -83,7 +83,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0; // 0 => PC + immediate
             ALUSrcB     = 1'b0;
-            ALUOp       = 2'b01;
+            ALUOp       = 2'h1;
         end
         7'b1101111: begin // jal rd, imm
             RegWrite    = 1'b1;
@@ -95,7 +95,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0; // 0 => PC + immediate
             ALUSrcB     = 1'b0; // WriteBack1 = 1 => don't care
-            ALUOp       = 2'b00; // WriteBack1 = 1 => don't care
+            ALUOp       = 2'h0; // WriteBack1 = 1 => don't care
         end
         7'b1100111: begin // jalr rd, rs, imm
             RegWrite    = 1'b1;
@@ -107,7 +107,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b1;  // 1 => rs + immediate
             ALUSrcB     = 1'b0;  // WriteBack1 = 1 => don't care
-            ALUOp       = 2'b00; // WriteBack1 = 1 => don't care
+            ALUOp       = 2'h0; // WriteBack1 = 1 => don't care
         end
         default: begin
             RegWrite    = 1'b0;
@@ -119,7 +119,7 @@ always @(opcode) begin
             MemWrite    = 1'b0;
             ALUSrcA     = 1'b0;
             ALUSrcB     = 1'b0;
-            ALUOp       = 2'b00;
+            ALUOp       = 2'h0;
         end
     endcase
 end

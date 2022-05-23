@@ -21,8 +21,13 @@ always @(*) begin
         7'b0110011: begin // R-type
             Imm_Gen_o = 32'b0;
         end
-        7'b0010011: begin // addi
-            Imm_Gen_o = { { 21{ sign } }, instr_i[30:20] };
+        7'b0010011: begin // I-type
+            if (func3 == 3'b001) begin
+                Imm_Gen_o = { 7'b0, instr_i[24:20] };
+            end
+            else begin
+                Imm_Gen_o = { { 21{ sign } }, instr_i[30:20] };
+            end
         end
         7'b0000011: begin // Load
             Imm_Gen_o = { { 21{ sign } }, instr_i[30:20] };

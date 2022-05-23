@@ -26,14 +26,16 @@ assign B = (Binvert) ? ~src2 : src2;
 
 assign addResult = A + B + Binvert;
 
-
 always @(*) begin
-    case (operation)
-        2'b00: result = A & B;
-        2'b01: result = A | B;
-        2'b10: result = addResult;
-        2'b11: result = (addResult[31]) ? 32'b1 : 32'b0;
-    endcase
+    if (ALU_control == 4'1000) result = src1 << src2;
+    else begin
+        case (operation)
+            2'b00: result = A & B;
+            2'b01: result = A | B;
+            2'b10: result = addResult;
+            2'b11: result = (addResult[31]) ? 32'b1 : 32'b0;
+        endcase
+    end
 end
 
 always @(result) begin

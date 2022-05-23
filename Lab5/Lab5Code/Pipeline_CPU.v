@@ -227,7 +227,7 @@ MUX_3to1 MUX_ALU_src1(
     .data1_i(MUXMemtoReg_o),
     .data2_i(EXEMEM_ALUResult_o),
     .select_i(ForwardA)
-    .data_o(ALU_src1_o)
+    .data_o(ALUSrc1_o)
 );
 
 MUX_3to1 MUX_ALU_src2(
@@ -235,7 +235,7 @@ MUX_3to1 MUX_ALU_src2(
     .data1_i(MUXMemtoReg_o),
     .data2_i(EXEMEM_ALUResult_o),
     .select_i(ForwardB)
-    .data_o(ALU_src2_o)
+    .data_o(ALUSrc2_o)
 );
 
 ALU_Ctrl ALU_Ctrl(
@@ -246,8 +246,8 @@ ALU_Ctrl ALU_Ctrl(
 
 alu alu(
     .rst_n(rst_i),
-    .src1(ALU_src1_o),
-    .src2(ALU_src2_o),
+    .src1(ALUSrc1_o),
+    .src2(ALUSrc2_o),
     .ALU_control(ALU_Ctrl_o),
     .result(ALUResult)
     .zero(ALU_zero)

@@ -96,16 +96,14 @@ always @(opcode) begin
             Jump        = 1'b1;
         end
         default: begin
-            RegWrite    = 1'b0;
             Branch      = 1'b0;
-            Jump        = 1'b0;
-            WriteBack1  = 1'b0;
-            WriteBack0  = 1'b0;
+            ALUSrc      = 1'b0;
+            RegWrite    = 1'b0;
+            ALUOp       = 2'b00;
             MemRead     = 1'b0;
             MemWrite    = 1'b0;
-            ALUSrcA     = 1'b0;
-            ALUSrcB     = 1'b0;
-            ALUOp       = 2'h0;
+            MemtoReg    = 1'b0;
+            Jump        = 1'b0;
         end
     endcase
 end

@@ -45,7 +45,7 @@ always @(posedge clk_i) begin
         Exe_s <= 2'b0;
         data1_s <= 32'b0;
         data2_s <= 32'b0;
-        immgen_s <= 32'b0
+        immgen_s <= 32'b0;
         alu_ctrl_s <= 4'b0;
         WBreg_s <= 4'b0;
         pc_add4_s <= 32'b0;
@@ -68,7 +68,7 @@ always @(posedge clk_i) begin
         Exe_s <= Exe_i;
         data1_s <= data1_i;
         data2_s <= data2_i;
-        immgen_s <= immgen_i
+        immgen_s <= immgen_i;
         alu_ctrl_s <= alu_ctrl_instr;
         WBreg_s <= WBreg_i;
         pc_add4_s <= pc_add4_i;

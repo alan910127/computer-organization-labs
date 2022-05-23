@@ -18,12 +18,12 @@ module ForwardingUnit (
 always @(*) begin
     // EXEMEM has priority over MEMWB
     if ((EXEMEM_RegWrite) && (EXEMEM_RD != 0) && (EXEMEM_RD == IDEXE_RS1)) ForwardA = `SELECT_EXEMEM;
-    else if ((MEMWB_RegWrite) && (MEMWB_RD != 0) && (MEMWB_RD == IDEXE_RS1)) ForwordA = `SELECT_IDEXE;
-    else ForwordA = `SELECT_ORIGINAL;
+    else if ((MEMWB_RegWrite) && (MEMWB_RD != 0) && (MEMWB_RD == IDEXE_RS1)) ForwardA = `SELECT_IDEXE;
+    else ForwardA = `SELECT_ORIGINAL;
 
     if ((EXEMEM_RegWrite) && (EXEMEM_RD != 0) && (EXEMEM_RD == IDEXE_RS2)) ForwardB = `SELECT_EXEMEM;
-    else if ((MEMWB_RegWrite) && (MEMWB_RD != 0) && (MEMWB_RD == IDEXE_RS2)) ForwordB = `SELECT_IDEXE;
-    else ForwordB = `SELECT_ORIGINAL;
+    else if ((MEMWB_RegWrite) && (MEMWB_RD != 0) && (MEMWB_RD == IDEXE_RS2)) ForwardB = `SELECT_IDEXE;
+    else ForwardB = `SELECT_ORIGINAL;
 end
 
 endmodule

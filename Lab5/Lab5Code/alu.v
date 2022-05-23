@@ -27,7 +27,7 @@ assign B = (Binvert) ? ~src2 : src2;
 assign addResult = A + B + Binvert;
 
 always @(*) begin
-    if (ALU_control == 4'1000) result = src1 << src2;
+    if (ALU_control == 4'b1000) result = src1 << src2;
     else begin
         case (operation)
             2'b00: result = A & B;

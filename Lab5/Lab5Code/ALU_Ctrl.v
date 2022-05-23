@@ -10,8 +10,6 @@ module ALU_Ctrl(
 wire [3-1:0] func3;
 assign func3 = instr[2:0];
 
-reg ALU_Ctrl_o;
-
 always @(*) begin
     case (ALUOp)
         2'b00: begin // I-type

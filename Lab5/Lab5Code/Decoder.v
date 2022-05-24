@@ -92,7 +92,7 @@ always @(opcode) begin
             ALUOp       = 2'b00;
             MemRead     = 1'b0;
             MemWrite    = 1'b0;
-            MemtoReg    = 1'b0;
+            MemtoReg    = 1'b0; // Jump = 1 => don't care
             Jump        = 1'b1;
         end
         default: begin

@@ -150,7 +150,7 @@ Decoder Decoder(
     .Jump(Jump)
 );
 
-assign Decoder_o = { MemtoReg, Jump, RegWrite, MemRead, MemWrite, ALUOp, ALUSrc };
+assign Decoder_o = { RegWrite, Jump, MemtoReg, MemRead, MemWrite, ALUOp, ALUSrc };
 
 Reg_File RF(
     .clk_i(clk_i),
@@ -159,10 +159,14 @@ Reg_File RF(
     .RTaddr_i(IFID_Instr_o[24:20]),
     .RDaddr_i(IFID_Instr_o[11:7]),
     .RDdata_i(MUXMemtoReg_o),
-    .RegWrite_i(EXEMEM_WB_o[0]),
+    .RegWrite_i(EXEMEM_WB_o[2]),
     .RSdata_o(RSdata_o),
     .RTdata_o(RTdata_o)
 );
+
+assign Branch_zero = (RSdata_o - RTdata_o == 0) ? 1'b1 : 1'b0;
+assign MUXPCSrc = (Branch & Branch_zero) | Jump;
+assign IFID_Flush = (Branch & Branch_zero) | Jump;
 
 Imm_Gen ImmGen(
     .instr_i(IFID_Instr_o),
@@ -219,8 +223,8 @@ ForwardingUnit FWUnit(
     .IDEXE_RS2(IDEXE_Instr_o[24:20]),
     .EXEMEM_RD(EXEMEM_Instr_11_7_o),
     .MEMWB_RD(MEMWB_Instr_11_7_o),
-    .EXEMEM_RegWrite(EXEMEM_WB_o),
-    .MEMWB_RegWrite(MEMWB_WB_o),
+    .EXEMEM_RegWrite(EXEMEM_WB_o[2]),
+    .MEMWB_RegWrite(MEMWB_WB_o[2]),
     .ForwardA(ForwardA),
     .ForwardB(ForwardB)
 );

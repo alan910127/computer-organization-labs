@@ -36,10 +36,10 @@ always @(*) begin
             Imm_Gen_o = { { 21{ sign } }, instr_i[30:25], instr_i[11:7] };
         end
         7'b1100011: begin // branch
-            Imm_Gen_o = { { 20{ sign } }, instr_i[7], instr_i[30:25], instr_i[11:8], 1'b0 };
+            Imm_Gen_o = { { 21{ sign } }, instr_i[7], instr_i[30:25], instr_i[11:8] };
         end
         7'b1101111: begin // jal
-            Imm_Gen_o = { { 12{ sign } }, instr_i[19:12], instr_i[20], instr_i[30:21], 1'b0 };
+            Imm_Gen_o = { { 13{ sign } }, instr_i[19:12], instr_i[20], instr_i[30:21] };
         end
         7'b1100111: begin // jalr
             Imm_Gen_o = { { 21{ sign } }, instr_i[30:20] };

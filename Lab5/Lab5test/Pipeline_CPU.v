@@ -117,7 +117,10 @@ IFID_register IFtoID(
     .IFID_write(IFID_Write),
     .address_i(PC_o),
     .instr_i(Instr_o), 
-    .pc_add4_i(PC_Add4)
+    .pc_add4_i(PC_Add4),
+    .address_o(IFID_PC_o),
+    .instr_o(IFID_Instr_o),
+    .pc_add4_o(IFID_PC_Add4_o)
 );
 
 // ID
@@ -125,15 +128,15 @@ Hazard_detection Hazard_detection_obj(
     .IFID_regRs(IFID_Instr_o[19:15]),
     .IFID_regRt(IFID_Instr_o[24:20]),
     .IDEXE_regRd(IDEXE_Instr_11_7_o),
-    .IDEXE_memRead(IDEXE_Mem_o),
+    .IDEXE_memRead(IDEXE_Mem_o[1]),
     .PC_write(PC_write),
     .IFID_write(IFID_Write),
     .control_output_select(MUXControl)
 );
 
-MUX_2to1 MUX_control(
-    .data0_i(Decoder_o),
-    .data1_i(0), 
+MUX_2to1 #(.size(8)) MUX_control(
+    .data0_i(Decoder_o[7:0]),
+    .data1_i(8'b0), 
     .select_i(MUXControl),
     .data_o(MUX_control_o)
 );
@@ -150,23 +153,27 @@ Decoder Decoder(
     .Jump(Jump)
 );
 
-assign Decoder_o = { MemtoReg, Jump, RegWrite, MemRead, MemWrite, ALUOp, ALUSrc };
+assign Decoder_o = { RegWrite, Jump, MemtoReg, MemRead, MemWrite, ALUOp, ALUSrc };
 
 Reg_File RF(
     .clk_i(clk_i),
     .rst_i(rst_i),
     .RSaddr_i(IFID_Instr_o[19:15]),
     .RTaddr_i(IFID_Instr_o[24:20]),
-    .RDaddr_i(IFID_Instr_o[11:7]),
+    .RDaddr_i(MEMWB_Instr_11_7_o),
     .RDdata_i(MUXMemtoReg_o),
-    .RegWrite_i(EXEMEM_WB_o),
+    .RegWrite_i(MEMWB_WB_o[2]),
     .RSdata_o(RSdata_o),
     .RTdata_o(RTdata_o)
 );
 
+assign Branch_zero = (RSdata_o - RTdata_o == 0) ? 1'b1 : 1'b0;
+assign MUXPCSrc = (Branch & Branch_zero) | Jump;
+assign IFID_Flush = (Branch & Branch_zero) | Jump;
+
 Imm_Gen ImmGen(
     .instr_i(IFID_Instr_o),
-    .ImmGen_o(Imm_Gen_o)
+    .Imm_Gen_o(Imm_Gen_o)
 );
 
 Shift_Left_1 SL1(
@@ -191,7 +198,7 @@ IDEXE_register IDtoEXE(
     .data2_i(RTdata_o),
     .immgen_i(Imm_Gen_o),
     .alu_ctrl_instr({IFID_Instr_o[30], IFID_Instr_o[14:12]}),
-    .WBreg_i(RDaddr_i),
+    .WBreg_i(IFID_Instr_o[11:7]),
     .pc_add4_i(IFID_PC_Add4_o),
 
     .instr_o(IDEXE_Instr_o),
@@ -208,9 +215,9 @@ IDEXE_register IDtoEXE(
 
 // EXE
 MUX_2to1 MUX_ALUSrc(
-    .data0_i(IDEXE_RTdata_o),
+    .data0_i(ALUSrc2_o),
     .data1_i(IDEXE_ImmGen_o),
-    .select_i(MUXALUSrc),
+    .select_i(IDEXE_Exe_o[0]), // (ALUOp(2), ALUSrc)
     .data_o(MUXALUSrc_o)
 );
 
@@ -219,8 +226,8 @@ ForwardingUnit FWUnit(
     .IDEXE_RS2(IDEXE_Instr_o[24:20]),
     .EXEMEM_RD(EXEMEM_Instr_11_7_o),
     .MEMWB_RD(MEMWB_Instr_11_7_o),
-    .EXEMEM_RegWrite(EXEMEM_WB_o),
-    .MEMWB_RegWrite(MEMWB_WB_o),
+    .EXEMEM_RegWrite(EXEMEM_WB_o[2]),
+    .MEMWB_RegWrite(MEMWB_WB_o[2]),
     .ForwardA(ForwardA),
     .ForwardB(ForwardB)
 );
@@ -243,14 +250,14 @@ MUX_3to1 MUX_ALU_src2(
 
 ALU_Ctrl ALU_Ctrl(
     .instr(IDEXE_Instr_30_14_12_o),
-    .ALUOp(ALUOp),
+    .ALUOp(IDEXE_Exe_o[2:1]),
     .ALU_Ctrl_o(ALU_Ctrl_o)
 );
 
 alu alu(
     .rst_n(rst_i),
     .src1(ALUSrc1_o),
-    .src2(ALUSrc2_o),
+    .src2(MUXALUSrc_o),
     .ALU_control(ALU_Ctrl_o),
     .result(ALUResult),
     .zero(ALU_zero)
@@ -275,7 +282,7 @@ EXEMEM_register EXEtoMEM(
     .zero_o(EXEMEM_zero),
     .alu_ans_o(EXEMEM_ALUResult_o),
     .rtdata_o(EXEMEM_RTdata_o),
-    .WBreg_o(EXEMEM_WBreg_o),
+    .WBreg_o(EXEMEM_Instr_11_7_o),
     .pc_add4_o(EXEMEM_PC_Add4_o)
 );
 
@@ -284,8 +291,8 @@ Data_Memory Data_Memory(
     .clk_i(clk_i),
     .addr_i(EXEMEM_ALUResult_o),
     .data_i(EXEMEM_RTdata_o),
-    .MemRead_i(EXEMEM_Mem_o),
-    .MemWrite_i(EXEMEM_WB_o),
+    .MemRead_i(EXEMEM_Mem_o[1]),
+    .MemWrite_i(EXEMEM_Mem_o[0]),
     .data_o(DM_o)
 );
 
@@ -299,18 +306,19 @@ MEMWB_register MEMtoWB(
     .pc_add4_i(EXEMEM_PC_Add4_o),
 
     .WB_o(MEMWB_WB_o),
-    .DM_o(MEMWB_Mem_o),
-    .alu_ans_o(MEMWB_ALUResult_o),
+    .DM_o(MEMWB_DM_o),
+    .alu_ans_o(MEMWB_ALUresult_o),
     .WBreg_o(MEMWB_Instr_11_7_o),
     .pc_add4_o(MEMWB_PC_Add4_o)
 );
 
 // WB
 MUX_3to1 MUX_MemtoReg(
-    .data0_i(MEMWB_ALUResult_o),
+    .data0_i(MEMWB_ALUresult_o),
     .data1_i(MEMWB_DM_o),
     .data2_i(MEMWB_PC_Add4_o),
-    .select_i(MEMWB_WB_o)
+    .select_i(MEMWB_WB_o[1:0]),
+    .data_o(MUXMemtoReg_o)
 );
 
 endmodule

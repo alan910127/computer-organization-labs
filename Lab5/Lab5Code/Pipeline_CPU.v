@@ -117,7 +117,10 @@ IFID_register IFtoID(
     .IFID_write(IFID_Write),
     .address_i(PC_o),
     .instr_i(Instr_o), 
-    .pc_add4_i(PC_Add4)
+    .pc_add4_i(PC_Add4),
+    .address_o(IFID_PC_o),
+    .instr_o(IFID_Instr_o),
+    .pc_add4_o(IFID_PC_Add4_o)
 );
 
 // ID
@@ -157,9 +160,9 @@ Reg_File RF(
     .rst_i(rst_i),
     .RSaddr_i(IFID_Instr_o[19:15]),
     .RTaddr_i(IFID_Instr_o[24:20]),
-    .RDaddr_i(IFID_Instr_o[11:7]),
+    .RDaddr_i(MEMWB_Instr_11_7_o),
     .RDdata_i(MUXMemtoReg_o),
-    .RegWrite_i(EXEMEM_WB_o[2]),
+    .RegWrite_i(MEMWB_WB_o[2]),
     .RSdata_o(RSdata_o),
     .RTdata_o(RTdata_o)
 );
@@ -212,9 +215,9 @@ IDEXE_register IDtoEXE(
 
 // EXE
 MUX_2to1 MUX_ALUSrc(
-    .data0_i(IDEXE_RTdata_o),
+    .data0_i(ALUSrc2_o),
     .data1_i(IDEXE_ImmGen_o),
-    .select_i(MUXALUSrc),
+    .select_i(IDEXE_Exe_o[0]), // (ALUOp(2), ALUSrc)
     .data_o(MUXALUSrc_o)
 );
 
@@ -247,14 +250,14 @@ MUX_3to1 MUX_ALU_src2(
 
 ALU_Ctrl ALU_Ctrl(
     .instr(IDEXE_Instr_30_14_12_o),
-    .ALUOp(ALUOp),
+    .ALUOp(IDEXE_Exe_o[2:1]),
     .ALU_Ctrl_o(ALU_Ctrl_o)
 );
 
 alu alu(
     .rst_n(rst_i),
     .src1(ALUSrc1_o),
-    .src2(ALUSrc2_o),
+    .src2(MUXALUSrc_o),
     .ALU_control(ALU_Ctrl_o),
     .result(ALUResult),
     .zero(ALU_zero)
@@ -314,7 +317,8 @@ MUX_3to1 MUX_MemtoReg(
     .data0_i(MEMWB_ALUresult_o),
     .data1_i(MEMWB_DM_o),
     .data2_i(MEMWB_PC_Add4_o),
-    .select_i(MEMWB_WB_o[1:0])
+    .select_i(MEMWB_WB_o[1:0]),
+    .data_o(MUXMemtoReg_o)
 );
 
 endmodule

@@ -28,6 +28,7 @@ assign addResult = A + B + Binvert;
 
 always @(*) begin
     if (ALU_control == 4'b1000) result = src1 << src2;
+    else if (ALU_control == 4'b1001) result = src1 ^ src2;
     else begin
         case (operation)
             2'b00: result = A & B;

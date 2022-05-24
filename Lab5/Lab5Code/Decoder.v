@@ -39,7 +39,7 @@ always @(opcode) begin
             Branch      = 1'b0;
             ALUSrc      = 1'b1;
             RegWrite    = 1'b1;
-            ALUOp       = 2'b00;
+            ALUOp       = 2'b11;
             MemRead     = 1'b0;
             MemWrite    = 1'b0;
             MemtoReg    = 1'b0;
@@ -78,11 +78,11 @@ always @(opcode) begin
         7'b1101111: begin // jal rd, imm
             Branch      = 1'b0;
             ALUSrc      = 1'b1;
-            RegWrite    = 1'b0;
+            RegWrite    = 1'b1;
             ALUOp       = 2'b00;
             MemRead     = 1'b0;
             MemWrite    = 1'b0;
-            MemtoReg    = 1'b0; // RegWrite = 0 => don't care
+            MemtoReg    = 1'b0; // Jump = 1 => don't care
             Jump        = 1'b1;
         end
         7'b1100111: begin // jalr rd, rs, imm

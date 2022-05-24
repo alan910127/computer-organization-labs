@@ -1,4 +1,6 @@
 `timescale 1ns/1ps
+`define NOP 32'h00000013 // addi x0, x0, 0
+
 module IFID_register (
     input clk_i,
     input rst_i,
@@ -21,12 +23,12 @@ reg [31:0] pc_add4_s;
 always @(posedge clk_i) begin
     if (~rst_i) begin
         address_s <= 32'b0;
-        instr_s <= 32'b0;
+        instr_s <= `NOP;
         pc_add4_s <= 32'b0;
     end
     else if (flush) begin
         address_o <= 32'b0;
-        instr_o <= 32'b0;
+        instr_o <= `NOP;
         pc_add4_o <= 32'b0;
     end
     else if (IFID_write) begin

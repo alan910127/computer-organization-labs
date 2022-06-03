@@ -7,7 +7,7 @@ using namespace std;
 
 Block::Block() : is_valid{ false } {}
 Block::Block(bool is_valid, uint32_t tag) : is_valid{ is_valid }, tag{ tag } {}
-bool Block::operator==(uint32_t tag) { return this->tag == tag; }
+bool Block::operator==(uint32_t tag) { return this->is_valid and this->tag == tag; }
 
 Set::Set(size_t N) : way(N), counter{ 0 }, use(N, 0) {}
 

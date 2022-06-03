@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -I./include
 
 TARGET = main
-OBJECTS = main.o direct_mapped_cache.o set_associative_cache.o
+OBJECTS = main.o direct_mapped_cache.o set_associative_cache.o cache_utilities.o
 
 .PHONY: all clean
 

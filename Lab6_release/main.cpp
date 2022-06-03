@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     int set_ass_Block_size = 64;
     float set_ass_hit_ratio[6][4] = { 0 };
 
-    cout << "===================== N-way set associative result =======================" << "\n\n" << "Bloack size: " << set_ass_Block_size << "\n\n";
+    cout << "===================== N-way set associative result =======================" << "\n\n" << "Block size: " << set_ass_Block_size << "\n\n";
     /* compute and record LRU set_associative results */
     for (int cache_idx = 0; cache_idx < 6; cache_idx++) {
         for (int way_ldx = 0; way_ldx < 4; way_ldx++) {

@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-struct Block {
-    bool is_valid;
-    uint32_t tag;
-    Block();
-};
-
-int get_indexing_size(int size);
-uint32_t get_bits(uint32_t value, int left, int right);
+/**
+ * @brief Perform the direct mapped cache and calculate the hit rate
+ *
+ * @param filename the file to specified the accessing sequence
+ * @param block_size size of a block in byte
+ * @param cache_size size of the cache in byte
+ * @return hit rate
+ */
 float direct_mapped(std::string file, int block_size, int cache_size);

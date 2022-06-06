@@ -68,7 +68,7 @@ int get_indexing_size(int size) {
  * @return the bits in range with the offset adjusted
  */
 uint32_t get_bits(uint32_t value, int offset, int bit_length) {
-    uint32_t mask = ~(0xffffffffu << (bit_length));
+    uint32_t mask = (1u << bit_length) - 1;
     value >>= offset;
     return value & mask;
 }

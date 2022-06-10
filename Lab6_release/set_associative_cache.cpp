@@ -27,12 +27,12 @@ float set_associative(string filename, int way, int block_size, int cache_size) 
 
     vector<Set> cache(number_sets, Set(way));
 
-    ifstream file{ filename };
+    ifstream file { filename };
 
     uint32_t address;
     while (file >> hex >> address) {
         auto index = get_bits(address, index_offset, index_size);
-        auto tag = get_bits(address, tag_offset, tag_offset);
+        auto tag = get_bits(address, tag_offset, tag_size);
 
         if (cache[index].add_block(tag)) ++hit_num;
         ++total_num;

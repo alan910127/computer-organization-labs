@@ -1,8 +1,9 @@
 CC = g++
-CFLAGS = -I./include
+CFLAGS = -I./include -std=c++17 
 
-TARGET = main
-OBJECTS = main.o direct_mapped_cache.o set_associative_cache.o cache_utilities.o
+TARGET = main.o
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.obj)
 
 .PHONY: all clean
 
@@ -11,9 +12,8 @@ all: ${TARGET}
 ${TARGET}: ${OBJECTS}
 	$(CC) $(CFLAGS) $^ -o ${TARGET}
 
-%.o: %.cpp
+%.obj: %.cpp
 	$(CC) $(CFLAGS) $< -c -o $@
 
 clean:
-	-rm -f *.o
-	-rm -f ${TARGET}
+	-rm -f ${TARGET} ${OBJECTS}

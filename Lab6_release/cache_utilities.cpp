@@ -5,11 +5,11 @@
 
 using namespace std;
 
-Block::Block() : is_valid{ false } {}
-Block::Block(bool is_valid, uint32_t tag) : is_valid{ is_valid }, tag{ tag } {}
+Block::Block() : is_valid { false } {}
+Block::Block(bool is_valid, uint32_t tag) : is_valid { is_valid }, tag { tag } {}
 bool Block::operator==(uint32_t tag) { return this->tag == tag; }
 
-Set::Set(size_t N) : way(N), counter{ 0 }, use(N, 0) {}
+Set::Set(size_t N) : way(N), counter { 0 }, use(N, 0) {}
 
 
 /**
@@ -68,7 +68,7 @@ int get_indexing_size(int size) {
  * @return the bits in range with the offset adjusted
  */
 uint32_t get_bits(uint32_t value, int offset, int bit_length) {
-    uint32_t mask = ~(0xffffffffu << (bit_length));
+    uint32_t mask = (1u << bit_length) - 1;
     value >>= offset;
     return value & mask;
 }
